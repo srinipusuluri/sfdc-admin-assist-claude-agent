@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment files — NEVER commit real credentials
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# Build output
+frontend/dist/
+frontend/.vite/
+build/
+
+# Claude Code local settings (may contain personal preferences or tokens)
+.claude/settings.local.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Salesforce CLI state
+.sf/
+.sfdx/
+
+# Lock files (optional — remove these lines to commit lock files)
+# package-lock.json
+# yarn.lock
