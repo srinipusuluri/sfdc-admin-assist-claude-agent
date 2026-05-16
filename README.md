@@ -285,6 +285,62 @@ A typical admin question costs **< $0.001**. The sidebar tracks exact token coun
 
 ---
 
+## Extending This Pattern — More Claude + Salesforce Agents
+
+The same architecture used here (Claude + MCP + jsforce + React UI) can be applied to build a full suite of CRM intelligence agents. The Admin Assist you're running now is the foundation — every agent below is built the same way: define MCP tools, write a system prompt, connect to the right data sources.
+
+### Recommended build sequence (highest ROI first)
+
+| # | Agent | What it does | Key MCP / data sources |
+|---|---|---|---|
+| 1 | **Renewals Intelligence** | At-risk scoring, renewal playbooks, churn signals 90 days out with a suggested save play | Contract MCP, Usage analytics, Churn model, Auto-email |
+| 2 | **Forecasting Intelligence** | AI-driven pipeline analysis, commit vs best-case scenarios, rep-level coaching alerts, explains *why* a forecast changed | Pipeline MCP, Historical win data, Einstein AI, Slack alerts |
+| 3 | **Customer Health Score** | Aggregates usage, NPS, support tickets, logins into a single health score + intervention playbook | CDP data, NPS surveys, Product analytics, Mixpanel MCP |
+| 4 | **Sales Team Assist** | Pipeline coaching, next best actions, forecast summaries, follow-up email drafting with CRM context | Opportunity MCP, Einstein scoring, Email compose, Calendar |
+| 5 | **Multi-Agent Orchestrator** | Smart router — user asks one question, the right agent handles it behind the scenes | All agents above |
+
+### Developer & Operations agents
+
+| Agent | What it does | Key tools |
+|---|---|---|
+| **Dev Assist** | Apex/LWC code review, governor limit tracing through call stack, debug log analysis, test class generation | Apex analyzer, SFDX CLI, Git MCP, Log parser |
+| **Observability Agent** | Daily briefings: failed batch jobs, API usage %, flows throwing errors — passive org health watcher | Event monitoring, Shield logs, Splunk MCP, PagerDuty |
+| **DevOps Assist** | CI/CD pipeline copilot — explains deployments, predicts risk from what changed, auto-generates release notes from commit diffs | GitHub MCP, Copado, Jenkins, Jira MCP |
+
+### Customer-facing & Service agents
+
+| Agent | What it does | Key tools |
+|---|---|---|
+| **Service Cloud Assist** | Auto-summarizes incoming cases, finds KB articles, checks SLA time remaining, suggests resolution from similar closed cases | Case MCP, Omni-Channel, Five9 CTI, Knowledge base |
+| **Customer Chat Assist** | Real-time sentiment scoring during live chat, automatic escalation triggers when frustration spikes, full CRM context injection | Live chat MCP, Sentiment API, Einstein Bot, Escalation rules |
+| **Voice of Customer (VoC)** | Aggregates reviews, NPS comments, support chat, social into weekly insight digests; auto-clusters themes and links to product roadmap | Sentiment API, G2/Trustpilot, Twitter MCP, NPS data |
+
+### Revenue Intelligence agents
+
+| Agent | What it does | Key tools |
+|---|---|---|
+| **Deal Coach** | Analyzes stalled deals, surfaces winning patterns, compares your deal to 50 similar won deals and tells you what's missing | Opportunity MCP, Win/loss data, Call transcripts, Gong MCP |
+| **CPQ Assist** | Quote optimization, discount guardrails, bundle suggestions, margin impact — "this discount drops margin below threshold, here's an alternative bundle" | CPQ MCP, Pricing engine, Approval workflows, ERP data |
+| **Upsell & Cross-sell Finder** | Identifies white-space opportunities using peer account comparisons and usage gaps | Account MCP, Product catalog, Lookalike modeling, Revenue Cloud |
+
+### Foundation layer (build early, all agents share it)
+
+| Agent | What it does | Key tools |
+|---|---|---|
+| **Knowledge Search Agent** | RAG over KB articles, past cases, product docs — answer-first retrieval. All other agents call this to avoid hallucinating policy details | RAG pipeline, SFDC Knowledge, Vector search, Drive MCP |
+| **Marketing Team Assist** | Campaign brief → content → UTM setup → performance debrief in one agent | Marketing Cloud, Pardot MCP, UTM builder, Segment |
+
+### Why this architecture scales
+
+Each new agent follows the same three-step pattern used in this repo:
+1. **Define MCP tools** — expose the right Salesforce objects and external APIs as tools in a new `*-mcp-server.js`
+2. **Write a focused system prompt** — scope the agent to its domain (sales, service, DevOps, etc.)
+3. **Reuse the agentic loop** — `claude-agent.js` already handles multi-step tool use, cost tracking, and session management
+
+The dual-MCP pattern (custom server + official `@salesforce/mcp`) means you can pull in any Salesforce toolset without rewriting auth or transport logic.
+
+---
+
 ## License
 
 MIT
