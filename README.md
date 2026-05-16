@@ -2,6 +2,9 @@
 
 A natural-language Salesforce admin tool powered by **Claude Haiku** and the **Model Context Protocol (MCP)**. Ask plain-English questions or give instructions — the AI issues the right Salesforce API calls and returns readable results.
 
+<img width="985" height="692" alt="image" src="https://github.com/user-attachments/assets/0b476447-1307-4797-9492-b40e4631487e" />
+
+
 ---
 
 ## Features
